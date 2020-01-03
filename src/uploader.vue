@@ -57,6 +57,7 @@ export default {
   &-bar {
     flex-grow: 1;
     margin: 0 1rem;
+    min-width: 200px;
     border-radius: $border-radius;
     height: 5px;
     background-color: $border-color;

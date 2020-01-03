@@ -1,5 +1,5 @@
 <template>
-  <div class="elder-image">
+  <div class="elder-image" :class="['elder-image--' + placement]">
     <label v-if="label" :for="id" class="elder-image__label">
       {{ label }}
       <span v-if="isRequired" class="elder-image__label-required">*</span>
@@ -12,9 +12,18 @@
       @dragover="onDragOver"
     >
       <input type="text" :value="value" :required="isRequired" />
-      <input type="file" accept="image/*" ref="input" @change="onChange" :disabled="!canUpload" :multiple="multiple" />
+      <input
+        type="file"
+        accept="image/*"
+        ref="input"
+        @change="onChange"
+        :disabled="!canUpload"
+        :multiple="multiple"
+      />
       <div class="elder-image__droparea-instruction">
-        <slot name="drop-message"><div v-html="dropMessage"></div></slot>
+        <slot name="drop-message">
+          <div v-html="dropMessage"></div>
+        </slot>
       </div>
     </div>
     <div class="elder-image__thumbnails">
@@ -71,6 +80,10 @@ export default {
       type: String,
       default: 'cover',
     },
+    placement: {
+      type: String,
+      enum: ['outside', 'inside'],
+    },
   },
   data() {
     return {
@@ -103,6 +116,7 @@ export default {
       return {
         backgroundImage: `url(${this.serializeComp(this.selected).url})`,
         backgroundSize: this.size,
+        backgroundOrigin: this.size === 'contain' ? 'content-box' : undefined,
         borderStyle: 'solid',
         borderWidth: '1px',
       }
@@ -179,6 +193,7 @@ export default {
   display: flex;
   flex-direction: column;
   text-align: left;
+  position: relative;
 
   &__label {
     display: block;
@@ -198,7 +213,6 @@ export default {
     border: 2px dashed $border-color;
     background-position: center;
     background-repeat: no-repeat;
-    background-origin: content-box;
     background-color: $input-color;
     border-radius: $border-radius;
     padding: 1rem;
@@ -245,13 +259,21 @@ export default {
 
   &__uploader {
     margin-top: 1rem;
+
+    .elder-image--inside & {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin-top: 2rem;
+      margin-right: 2rem;
+    }
   }
 
   &__thumbnails {
-    $space: 0.5rem;
+    $space: 1rem;
 
     display: flex;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
     flex-wrap: wrap;
 
     margin-left: -$space;
@@ -260,6 +282,12 @@ export default {
     & > * {
       margin-left: $space;
       margin-bottom: $space;
+    }
+
+    .elder-image--inside & {
+      position: absolute;
+      bottom: 2rem;
+      right: 2rem;
     }
   }
 }
