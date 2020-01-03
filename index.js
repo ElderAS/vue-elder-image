@@ -1,10 +1,19 @@
 import ImageComponent from './src/component.vue'
 
 const Options = {
-  upload(val) {
+  upload(file, onProgress) {
     console.warn('[vue-elder-image]: You need to setup the upload function before using this plugin')
-
-    return Promise.resolve()
+    onProgress(50)
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader()
+      reader.onloadend = function() {
+        resolve({
+          url: reader.result,
+          type: file.type,
+        })
+      }
+      reader.readAsDataURL(file)
+    })
   },
   serialize(val) {
     return val
