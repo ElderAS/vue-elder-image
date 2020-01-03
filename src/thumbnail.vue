@@ -1,0 +1,89 @@
+<template>
+  <div
+    class="elder-image__thumbnail"
+    :class="{ 'elder-image__thumbnail--selected': selected }"
+    :style="style"
+    @click="$emit('click')"
+  >
+    <div class="elder-image__thumbnail-delete" @click="$emit('delete')">
+      <FontAwesomeIcon icon="trash"></FontAwesomeIcon>
+    </div>
+  </div>
+</template>
+
+<script>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+export default {
+  props: {
+    value: Object,
+    selected: Boolean,
+    size: {
+      type: String,
+      default: '4rem',
+    },
+  },
+  computed: {
+    style() {
+      return {
+        backgroundImage: `url(${this.value.url})`,
+        width: this.size,
+        height: this.size,
+      }
+    },
+  },
+  components: {
+    FontAwesomeIcon,
+  },
+}
+</script>
+
+<style lang="scss">
+.elder-image__thumbnail {
+  @import './variables.scss';
+
+  position: relative;
+  background-position: center;
+  background-size: cover;
+  background-color: $input-color;
+
+  cursor: pointer;
+
+  border-radius: $border-radius;
+  border: 1px solid $border-color;
+
+  &--selected {
+    border-color: $primary;
+    box-shadow: 0 3px 10px -2px rgba(black, 0.3);
+  }
+
+  &-delete {
+    $size: 25px;
+
+    color: white;
+    display: flex;
+    font-size: 0.65em;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: -$size/5;
+    top: -$size/5;
+    background-color: rgba($error, 0.9);
+    border-radius: 50%;
+    height: $size;
+    width: $size;
+    cursor: pointer;
+    transition: opacity 150ms ease-out, transform 150ms ease-out;
+    z-index: 2;
+
+    @media (hover: hover) {
+      opacity: 0;
+      transform: translateY(50%);
+    }
+
+    .elder-image__thumbnail:hover & {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+</style>
