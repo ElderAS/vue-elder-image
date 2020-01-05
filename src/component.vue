@@ -12,21 +12,14 @@
       @dragover="onDragOver"
     >
       <input type="text" :value="value" :required="isRequired" />
-      <input
-        type="file"
-        accept="image/*"
-        ref="input"
-        @change="onChange"
-        :disabled="!canUpload"
-        :multiple="multiple"
-      />
+      <input type="file" accept="image/*" ref="input" @change="onChange" :disabled="!canUpload" :multiple="multiple" />
       <div class="elder-image__droparea-instruction">
         <slot name="drop-message">
           <div v-html="dropMessage"></div>
         </slot>
       </div>
     </div>
-    <div class="elder-image__thumbnails">
+    <Draggable v-model="thumbnails" :disabled="!multiple || !sortable" class="elder-image__thumbnails">
       <thumbnail
         v-for="(item, index) in thumbnails"
         :key="index"
@@ -35,7 +28,7 @@
         @click="selected = item"
         @delete="remove(item)"
       />
-    </div>
+    </Draggable>
     <Uploader
       v-if="queue.total"
       :value="queue.progress"
@@ -51,6 +44,7 @@ import { AttributeBoolean, Clone } from './utils'
 import { Options } from '../index'
 import Uploader from './uploader'
 import Thumbnail from './thumbnail'
+import Draggable from 'vuedraggable'
 
 import './icons'
 
@@ -74,6 +68,10 @@ export default {
     value: [Array, Object, String],
     label: String,
     multiple: Boolean,
+    sortable: {
+      type: Boolean,
+      default: true,
+    },
     upload: Function,
     serialize: Function,
     size: {
@@ -107,9 +105,15 @@ export default {
     canUpload() {
       return !this.isDisabled && !this.queue.total
     },
-    thumbnails() {
-      if (!this.value) return []
-      return this.value instanceof Array ? this.value : [this.value]
+    thumbnails: {
+      get() {
+        if (!this.value) return []
+        return this.value instanceof Array ? this.value : [this.value]
+      },
+      set(val) {
+        if (!this.multiple) return
+        this.$emit('input', val)
+      },
     },
     dropareaStyle() {
       if (!this.selected) return {}
@@ -182,6 +186,7 @@ export default {
   components: {
     Uploader,
     Thumbnail,
+    Draggable,
   },
 }
 </script>
