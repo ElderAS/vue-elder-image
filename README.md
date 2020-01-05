@@ -8,4 +8,4 @@
 
 ## Docs
 
-Coming soon...
+[See documentation here](https://elderas.github.io/vue-elder/components/image.html)
