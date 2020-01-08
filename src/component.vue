@@ -12,14 +12,33 @@
       @dragover="onDragOver"
     >
       <input type="text" :value="value" :required="isRequired" />
-      <input type="file" accept="image/*" ref="input" @change="onChange" :disabled="!canUpload" :multiple="multiple" />
+      <input
+        type="file"
+        accept="image/*"
+        ref="input"
+        @change="onChange"
+        :disabled="!canUpload"
+        :multiple="multiple"
+      />
       <div class="elder-image__droparea-instruction">
         <slot name="drop-message">
           <div v-html="dropMessage"></div>
         </slot>
       </div>
+      <div
+        v-if="!multiple && selected"
+        class="elder-image__thumbnail-delete"
+        @click="remove(selected)"
+      >
+        <FontAwesomeIcon icon="trash"></FontAwesomeIcon>
+      </div>
     </div>
-    <Draggable v-model="thumbnails" :disabled="!multiple || !sortable" class="elder-image__thumbnails">
+    <Draggable
+      v-if="multiple"
+      v-model="thumbnails"
+      :disabled="!sortable"
+      class="elder-image__thumbnails"
+    >
       <thumbnail
         v-for="(item, index) in thumbnails"
         :key="index"
@@ -149,7 +168,7 @@ export default {
         if (!result || !result.length) return
         this.$emit('input', this.multiple ? [...(this.value || []), ...result] : result[0])
         this.resetQueue()
-        if (!this.selected) this.$nextTick(() => this.select())
+        if (!this.selected || !this.multiple) this.$nextTick(() => this.select())
       })
     },
     remove(item) {
@@ -223,6 +242,17 @@ export default {
     padding: 1rem;
     text-align: center;
     flex-grow: 1;
+
+    &:hover .elder-image__thumbnail-delete {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .elder-image__thumbnail-delete {
+      top: initial;
+      bottom: 1rem;
+      right: 1rem;
+    }
 
     &-instruction {
       transition: opacity 250ms ease;
