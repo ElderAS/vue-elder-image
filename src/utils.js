@@ -15,4 +15,11 @@ function Clone(val) {
   return JSON.parse(JSON.stringify(val))
 }
 
-export { AttributeBoolean, BytesToSize, Clone }
+function IsAccepted(file, accept) {
+  if (!accept) return true
+  return accept.split(',').some(v => {
+    return file.type.startsWith(v.replace('*', ''))
+  })
+}
+
+export { AttributeBoolean, BytesToSize, Clone, IsAccepted }

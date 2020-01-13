@@ -6,10 +6,11 @@
     </label>
     <div
       class="elder-image__droparea"
-      :class="{ 'elder-image__droparea--selected': selected }"
+      :class="dropareaClass"
       :style="dropareaStyle"
       @drop="onDrop"
       @dragover="onDragOver"
+      @dragleave="onLeave"
     >
       <input type="text" :value="value" :required="isRequired" />
       <input
@@ -21,9 +22,10 @@
         :multiple="multiple"
       />
       <div class="elder-image__droparea-instruction">
-        <slot name="drop-message">
+        <slot v-if="isValidDragOver" name="drop-message">
           <div v-html="dropMessage"></div>
         </slot>
+        <FontAwesomeIcon v-else icon="ban" size="lg" />
       </div>
       <div
         v-if="!multiple && selected"
@@ -59,7 +61,9 @@
 </template>
 
 <script>
-import { AttributeBoolean, Clone } from './utils'
+import { AttributeBoolean, Clone, IsAccepted } from './utils'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 import { Options } from '../index'
 import Uploader from './uploader'
 import Thumbnail from './thumbnail'
@@ -110,12 +114,21 @@ export default {
     return {
       id: null,
       selected: null,
+      isDragOver: false,
+      isValidDragOver: true,
       queue: Clone(QueueTemplate),
     }
   },
   computed: {
     isRequired: AttributeBoolean('required'),
     isDisabled: AttributeBoolean('disabled'),
+    dropareaClass() {
+      return {
+        'elder-image__droparea--active': this.isDragOver,
+        'elder-image__droparea--invalid': !this.isValidDragOver,
+        'elder-image__droparea--selected': this.selected,
+      }
+    },
     serializeComp() {
       return this.serialize || Options.serialize
     },
@@ -151,7 +164,7 @@ export default {
   },
   methods: {
     run(files) {
-      files = Array.from(files).filter(f => f.type.match(/image.*/))
+      files = Array.from(files).filter(f => IsAccepted(f, 'image/*'))
 
       this.queue.total = files.length
       this.queue.counter = 0
@@ -189,11 +202,18 @@ export default {
     },
     onDrop(e) {
       e.preventDefault()
+      this.onLeave()
       if (this.isReadonly || !e.dataTransfer.files.length) return
       this.run(e.dataTransfer.files)
     },
     onDragOver(e) {
+      this.isValidDragOver = Array.from(e.dataTransfer.items).every(e => IsAccepted(e, 'image/*'))
+      this.isDragOver = true
       e.preventDefault()
+    },
+    onLeave() {
+      this.isValidDragOver = true
+      this.isDragOver = false
     },
     resetQueue() {
       this.queue = Clone(QueueTemplate)
@@ -214,6 +234,7 @@ export default {
     Uploader,
     Thumbnail,
     Draggable,
+    FontAwesomeIcon,
   },
 }
 </script>
@@ -251,6 +272,23 @@ export default {
     text-align: center;
     flex-grow: 1;
 
+    &--active {
+      background-color: rgba($primary, 0.2);
+      border-color: $primary;
+
+      &.elder-image__droparea--invalid {
+        border-color: $error;
+        color: $error;
+        background-color: rgba($error, 0.2);
+        background-image: none !important;
+        cursor: not-allowed;
+
+        .elder-image__droparea-instruction {
+          background-color: transparent;
+        }
+      }
+    }
+
     &:hover .elder-image__thumbnail-delete {
       opacity: 1;
       transform: translateY(0);
@@ -266,10 +304,6 @@ export default {
       transition: opacity 250ms ease;
       font-size: 0.9em;
 
-      .elder-image__droparea:hover & {
-        opacity: 1;
-      }
-
       @media (hover: hover) {
         .elder-image__droparea--selected & {
           opacity: 0;
@@ -277,6 +311,11 @@ export default {
           padding: 1rem;
           border-radius: $border-radius;
         }
+      }
+
+      .elder-image__droparea:hover &,
+      .elder-image__droparea--active & {
+        opacity: 1;
       }
     }
 
