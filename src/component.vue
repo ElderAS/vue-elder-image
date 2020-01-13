@@ -101,6 +101,10 @@ export default {
       type: String,
       enum: ['outside', 'inside'],
     },
+    uploadOptions: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   data() {
     return {
@@ -156,10 +160,14 @@ export default {
 
       Promise.all(
         files.map((file, index) => {
-          return this.uploadComp(file, val => {
-            progress[index] = val
-            this.queue.progress = progress.reduce((r, c) => (r += c), 0) / progress.length
-          }).then(res => {
+          return this.uploadComp(
+            file,
+            val => {
+              progress[index] = val
+              this.queue.progress = progress.reduce((r, c) => (r += c), 0) / progress.length
+            },
+            this.uploadOptions,
+          ).then(res => {
             this.queue.counter++
             return res
           })
