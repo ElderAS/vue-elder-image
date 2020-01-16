@@ -119,6 +119,14 @@ export default {
       queue: Clone(QueueTemplate),
     }
   },
+  watch: {
+    value: {
+      handler(val) {
+        if (!this.selected) this.select()
+      },
+      immediate: true,
+    },
+  },
   computed: {
     isRequired: AttributeBoolean('required'),
     isDisabled: AttributeBoolean('disabled'),
@@ -228,7 +236,6 @@ export default {
   },
   created() {
     this.id = this._uid
-    this.select()
   },
   components: {
     Uploader,
