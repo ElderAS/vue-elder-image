@@ -13,34 +13,18 @@
       @dragleave="onLeave"
     >
       <input type="text" :value="value" :required="isRequired" />
-      <input
-        type="file"
-        accept="image/*"
-        ref="input"
-        @change="onChange"
-        :disabled="!canUpload"
-        :multiple="multiple"
-      />
+      <input type="file" accept="image/*" ref="input" @change="onChange" :disabled="!canUpload" :multiple="multiple" />
       <div class="elder-image__droparea-instruction">
         <slot v-if="isValidDragOver" name="drop-message">
           <div v-html="dropMessage"></div>
         </slot>
         <FontAwesomeIcon v-else icon="ban" size="lg" />
       </div>
-      <div
-        v-if="!multiple && selected"
-        class="elder-image__thumbnail-delete"
-        @click="remove(selected)"
-      >
+      <div v-if="!multiple && selected" class="elder-image__thumbnail-delete" @click="remove(selected)">
         <FontAwesomeIcon icon="trash"></FontAwesomeIcon>
       </div>
     </div>
-    <Draggable
-      v-if="multiple"
-      v-model="thumbnails"
-      :disabled="!sortable"
-      class="elder-image__thumbnails"
-    >
+    <Draggable v-if="multiple" v-model="thumbnails" :disabled="!sortable" class="elder-image__thumbnails">
       <thumbnail
         v-for="(item, index) in thumbnails"
         :key="index"
