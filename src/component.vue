@@ -16,7 +16,7 @@
       <input type="file" accept="image/*" ref="input" @change="onChange" :disabled="!canUpload" :multiple="multiple" />
       <div class="elder-image__droparea-instruction">
         <slot v-if="isValidDragOver" name="drop-message">
-          <div v-html="dropMessage"></div>
+          <SlotHandler :value="dropMessage" />
         </slot>
         <FontAwesomeIcon v-else icon="ban" size="lg" />
       </div>
@@ -52,6 +52,7 @@ import { Options } from '../index'
 import Uploader from './uploader'
 import Thumbnail from './thumbnail'
 import Draggable from 'vuedraggable'
+import SlotHandler from './SlotHandler'
 
 import './icons'
 
@@ -226,6 +227,7 @@ export default {
     Thumbnail,
     Draggable,
     FontAwesomeIcon,
+    SlotHandler,
   },
 }
 </script>
