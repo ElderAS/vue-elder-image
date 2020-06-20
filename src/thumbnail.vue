@@ -48,15 +48,15 @@ export default {
   position: relative;
   background-position: center;
   background-size: cover;
-  background-color: var(--vue-elder-input-color);
+  background-color: GetVariable('input-color');
 
   cursor: pointer;
 
-  border-radius: var(--vue-elder-border-radius);
-  border: 1px solid var(--vue-elder-border-color);
+  border-radius: GetVariable('border-radius');
+  border: 1px solid GetVariable('border-color');
 
   &--selected {
-    border-color: var(--vue-elder-primary);
+    border-color: GetVariable('primary');
     box-shadow: 0 3px 10px -2px rgba(black, 0.3);
   }
 
@@ -71,7 +71,7 @@ export default {
     position: absolute;
     right: -$size/5;
     top: -$size/5;
-    background-color: rgba(var(--vue-elder-error), 0.9);
+    background-color: rgba(GetVariable('error'), 0.9);
     border-radius: 50%;
     height: $size;
     width: $size;
