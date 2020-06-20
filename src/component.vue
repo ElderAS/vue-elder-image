@@ -157,7 +157,7 @@ export default {
   },
   methods: {
     run(files) {
-      files = Array.from(files).filter(f => IsAccepted(f, 'image/*'))
+      files = Array.from(files).filter((f) => IsAccepted(f, 'image/*'))
 
       this.queue.total = files.length
       this.queue.counter = 0
@@ -168,17 +168,17 @@ export default {
         files.map((file, index) => {
           return this.uploadComp(
             file,
-            val => {
+            (val) => {
               progress[index] = val
               this.queue.progress = progress.reduce((r, c) => (r += c), 0) / progress.length
             },
             this.uploadOptions,
-          ).then(res => {
+          ).then((res) => {
             this.queue.counter++
             return res
           })
         }),
-      ).then(result => {
+      ).then((result) => {
         if (!result || !result.length) return
         this.$emit('input', this.multiple ? [...(this.value || []), ...result] : result[0])
         this.resetQueue()
@@ -186,7 +186,7 @@ export default {
       })
     },
     remove(item) {
-      this.$emit('input', this.multiple ? this.value.filter(v => v !== item) : null)
+      this.$emit('input', this.multiple ? this.value.filter((v) => v !== item) : null)
       if (this.selected === item) this.$nextTick(() => this.select())
     },
     onChange(e) {
@@ -200,7 +200,7 @@ export default {
       this.run(e.dataTransfer.files)
     },
     onDragOver(e) {
-      this.isValidDragOver = Array.from(e.dataTransfer.items).every(e => IsAccepted(e, 'image/*'))
+      this.isValidDragOver = Array.from(e.dataTransfer.items).every((e) => IsAccepted(e, 'image/*'))
       this.isDragOver = true
       e.preventDefault()
     },
@@ -233,9 +233,13 @@ export default {
 </script>
 
 <style lang="scss">
-.elder-image {
-  @import './variables.scss';
+@import './main.scss';
 
+:root {
+  @include GenerateVariables();
+}
+
+.elder-image {
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -247,7 +251,7 @@ export default {
     margin-bottom: 0.5em;
 
     &-required {
-      color: $error;
+      color: var(--vue-elder-error);
     }
   }
 
@@ -256,23 +260,23 @@ export default {
     justify-content: center;
     align-items: center;
     position: relative;
-    border: 2px dashed $border-color;
+    border: 2px dashed var(--vue-elder-border-color);
     background-position: center;
     background-repeat: no-repeat;
-    background-color: $input-color;
-    border-radius: $border-radius;
+    background-color: var(--vue-elder-input-color);
+    border-radius: var(--vue-elder-border-radius);
     padding: 1rem;
     text-align: center;
     flex-grow: 1;
 
     &--active {
-      background-color: rgba($primary, 0.2);
-      border-color: $primary;
+      background-color: rgba(var(--vue-elder-primary), 0.2);
+      border-color: var(--vue-elder-primary);
 
       &.elder-image__droparea--invalid {
-        border-color: $error;
-        color: $error;
-        background-color: rgba($error, 0.2);
+        border-color: var(--vue-elder-error);
+        color: var(--vue-elder-error);
+        background-color: rgba(var(--vue-elder-error), 0.2);
         background-image: none !important;
         cursor: not-allowed;
 
@@ -302,7 +306,7 @@ export default {
           opacity: 0;
           background-color: rgba(white, 0.75);
           padding: 1rem;
-          border-radius: $border-radius;
+          border-radius: var(--vue-elder-border-radius);
         }
       }
 
@@ -328,7 +332,7 @@ export default {
     }
 
     b {
-      color: $primary;
+      color: var(--vue-elder-primary);
     }
   }
 

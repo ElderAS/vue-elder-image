@@ -38,21 +38,25 @@ export default {
 </script>
 
 <style lang="scss">
-.elder-image__thumbnail {
-  @import './variables.scss';
+@import './main.scss';
 
+:root {
+  @include GenerateVariables();
+}
+
+.elder-image__thumbnail {
   position: relative;
   background-position: center;
   background-size: cover;
-  background-color: $input-color;
+  background-color: var(--vue-elder-input-color);
 
   cursor: pointer;
 
-  border-radius: $border-radius;
-  border: 1px solid $border-color;
+  border-radius: var(--vue-elder-border-radius);
+  border: 1px solid var(--vue-elder-border-color);
 
   &--selected {
-    border-color: $primary;
+    border-color: var(--vue-elder-primary);
     box-shadow: 0 3px 10px -2px rgba(black, 0.3);
   }
 
@@ -67,7 +71,7 @@ export default {
     position: absolute;
     right: -$size/5;
     top: -$size/5;
-    background-color: rgba($error, 0.9);
+    background-color: rgba(var(--vue-elder-error), 0.9);
     border-radius: 50%;
     height: $size;
     width: $size;
