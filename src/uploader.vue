@@ -41,12 +41,16 @@ export default {
 </script>
 
 <style lang="scss">
-.elder-image__uploader {
-  @import './variables.scss';
+@import './main.scss';
 
+:root {
+  @include GenerateVariables();
+}
+
+.elder-image__uploader {
   background-color: white;
-  border: 1px solid $border-color;
-  border-radius: $border-radius;
+  border: 1px solid GetVariable('border-color');
+  border-radius: GetVariable('border-radius');
   padding: 1rem;
   display: flex;
   justify-content: space-between;
@@ -59,13 +63,13 @@ export default {
   &-bar {
     flex-grow: 1;
     margin: 0 1rem;
-    border-radius: $border-radius;
+    border-radius: GetVariable('border-radius');
     height: 5px;
-    background-color: $border-color;
+    background-color: GetVariable('border-color');
   }
 
   &-bar-value {
-    background-color: $primary;
+    background-color: GetVariable('primary');
     height: inherit;
     border-radius: inherit;
     transition: width 100ms ease;
