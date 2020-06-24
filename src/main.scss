@@ -1,26 +1,11 @@
-//Colors
-$primary: #3a9acd !default;
-$error: #e83b35 !default;
-
-$states: (
-  ('primary', $primary, white, transparent, darken($primary, 8%), darken($primary, 6%), darken($primary, 4%)),
-  ('error', $error, white, transparent, darken($error, 8%), darken($error, 6%), darken($error, 4%))
+$variables: (
+  'primary': #3a9acd,
+  'error': #e83b35,
+  'border-radius': 3px,
+  'border-color': #eaeaea,
+  'input-color': #f2f2f2,
 );
 
 @function GetVariable($key) {
-  @return var(--vue-elder-#{$key});
-}
-
-@mixin GenerateVariable($key, $value) {
-  --vue-elder-#{$key}: #{$value};
-}
-
-@mixin GenerateVariables {
-  @include GenerateVariable('border-radius', 3px);
-  @include GenerateVariable('border-color', #eaeaea);
-  @include GenerateVariable('input-color', #f2f2f2);
-
-  @each $state in $states {
-    @include GenerateVariable(nth($state, 1), nth($state, 2));
-  }
+  @return var(--vue-elder-#{$key}, map-get($variables, $key));
 }

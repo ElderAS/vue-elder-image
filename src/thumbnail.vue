@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import './main.scss';
+@import './main';
 
 .elder-image__thumbnail {
   position: relative;
