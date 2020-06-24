@@ -240,14 +240,18 @@ export default {
 }
 
 .elder-image {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
   position: relative;
 
+  display: flex;
+  flex-direction: column;
+
+  text-align: left;
+
   &__label {
-    display: block;
     font-weight: bold;
+
+    display: block;
+
     margin-bottom: 0.5em;
 
     &-required {
@@ -256,29 +260,55 @@ export default {
   }
 
   &__droparea {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     position: relative;
-    border: 2px dashed GetVariable('border-color');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: GetVariable('input-color');
-    border-radius: GetVariable('border-radius');
-    padding: 1rem;
-    text-align: center;
+
+    display: flex;
+    align-items: center;
     flex-grow: 1;
+    justify-content: center;
+
+    padding: 1rem;
+
+    text-align: center;
+
+    border: 2px dashed GetVariable('border-color');
+    border-radius: GetVariable('border-radius');
+    background-color: GetVariable('input-color');
+    background-repeat: no-repeat;
+    background-position: center;
+
+    &:before {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+
+      content: '';
+
+      opacity: 0;
+      background-color: GetVariable('primary');
+    }
 
     &--active {
-      background-color: rgba(GetVariable('primary'), 0.2);
       border-color: GetVariable('primary');
 
+      &:before {
+        opacity: 0.15;
+      }
+
       &.elder-image__droparea--invalid {
-        border-color: GetVariable('error');
-        color: GetVariable('error');
-        background-color: rgba(GetVariable('error'), 0.2);
-        background-image: none !important;
         cursor: not-allowed;
+
+        color: GetVariable('error');
+        border-color: GetVariable('error');
+        background-image: none !important;
+
+        &:before {
+          opacity: 0.2;
+          background-color: GetVariable('error');
+        }
 
         .elder-image__droparea-instruction {
           background-color: transparent;
@@ -287,26 +317,29 @@ export default {
     }
 
     &:hover .elder-image__thumbnail-delete {
-      opacity: 1;
       transform: translateY(0);
+
+      opacity: 1;
     }
 
     .elder-image__thumbnail-delete {
       top: initial;
-      bottom: 1rem;
       right: 1rem;
+      bottom: 1rem;
     }
 
     &-instruction {
-      transition: opacity 250ms ease;
       font-size: 0.9em;
+
+      transition: opacity 250ms ease;
 
       @media (hover: hover) {
         .elder-image__droparea--selected & {
-          opacity: 0;
-          background-color: rgba(white, 0.75);
           padding: 1rem;
+
+          opacity: 0;
           border-radius: GetVariable('border-radius');
+          background-color: rgba(white, 0.75);
         }
       }
 
@@ -320,14 +353,18 @@ export default {
       position: absolute;
       top: 0;
       left: 0;
+
       width: 100%;
       height: 100%;
-      opacity: 0;
+
       cursor: pointer;
 
+      opacity: 0;
+
       &[type='text'] {
-        pointer-events: none;
         z-index: -1;
+
+        pointer-events: none;
       }
     }
 
@@ -343,6 +380,7 @@ export default {
       position: absolute;
       top: 0;
       right: 0;
+
       margin-top: 2rem;
       margin-right: 2rem;
     }
@@ -352,21 +390,21 @@ export default {
     $space: 1rem;
 
     display: flex;
-    margin-top: 1rem;
     flex-wrap: wrap;
 
-    margin-left: -$space;
+    margin-top: 1rem;
     margin-bottom: -$space;
+    margin-left: -$space;
 
     & > * {
-      margin-left: $space;
       margin-bottom: $space;
+      margin-left: $space;
     }
 
     .elder-image--inside & {
       position: absolute;
-      bottom: 2rem;
       right: 2rem;
+      bottom: 2rem;
     }
   }
 }
