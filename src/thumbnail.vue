@@ -40,10 +40,6 @@ export default {
 <style lang="scss">
 @import './main.scss';
 
-:root {
-  @include GenerateVariables();
-}
-
 .elder-image__thumbnail {
   position: relative;
   background-position: center;
@@ -71,7 +67,8 @@ export default {
     position: absolute;
     right: -$size/5;
     top: -$size/5;
-    background-color: rgba(GetVariable('error'), 0.9);
+    // background-color: rgba(GetVariable('error'), 0.9);
+    background-color: GetVariable('error');
     border-radius: 50%;
     height: $size;
     width: $size;
