@@ -41,17 +41,7 @@ export default {
 </script>
 
 <style lang="scss">
-$variables: (
-  'primary': #3a9acd,
-  'error': #e83b35,
-  'border-radius': 3px,
-  'border-color': #eaeaea,
-  'input-color': #f2f2f2,
-);
-
-@function GetVariable($key) {
-  @return var(--vue-elder-#{$key}, map-get($variables, $key));
-}
+@import './main';
 
 .elder-image__uploader {
   font-size: 0.7em;
