@@ -326,6 +326,7 @@ export default {
 
     &-instruction {
       font-size: 0.9em;
+      pointer-events: none;
 
       transition: opacity 250ms ease;
 
