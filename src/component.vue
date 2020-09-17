@@ -120,7 +120,10 @@ export default {
     },
   },
   computed: {
-    isRequired: AttributeBoolean('required'),
+    isRequired() {
+      if (!AttributeBoolean('required').call(this) || this.value) return false
+      return true
+    },
     isDisabled: AttributeBoolean('disabled'),
     dropareaClass() {
       return {
