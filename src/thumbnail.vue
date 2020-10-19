@@ -5,7 +5,7 @@
     :style="style"
     @click="$emit('click')"
   >
-    <div class="elder-image__thumbnail-delete" @click="$emit('delete')">
+    <div v-if="!disabled" class="elder-image__thumbnail-delete" @click="$emit('delete')">
       <FontAwesomeIcon icon="trash"></FontAwesomeIcon>
     </div>
   </div>
@@ -22,6 +22,7 @@ export default {
       default: '4rem',
     },
   },
+  inject: ['disabled'],
   computed: {
     style() {
       return {

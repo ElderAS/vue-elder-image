@@ -21,17 +21,22 @@
         :disabled="!canUpload"
         :multiple="multiple"
       />
-      <div class="elder-image__droparea-instruction">
+      <div v-if="canUpload" class="elder-image__droparea-instruction">
         <slot v-if="isValidDragOver" name="drop-message">
           <SlotHandler :value="dropMessage" />
         </slot>
         <FontAwesomeIcon v-else icon="ban" size="lg" />
       </div>
-      <div v-if="!multiple && selected" class="elder-image__thumbnail-delete" @click="remove(selected)">
+      <div v-if="!multiple && selected && !isDisabled" class="elder-image__thumbnail-delete" @click="remove(selected)">
         <FontAwesomeIcon icon="trash"></FontAwesomeIcon>
       </div>
     </div>
-    <Draggable v-if="multiple" v-model="thumbnails" :disabled="!sortable" class="elder-image__thumbnails">
+    <Draggable
+      v-if="multiple"
+      v-model="thumbnails"
+      :disabled="!sortable || !isDisabled"
+      class="elder-image__thumbnails"
+    >
       <thumbnail
         v-for="(item, index) in thumbnails"
         :key="index"
@@ -101,6 +106,11 @@ export default {
       type: Object,
       default: () => ({}),
     },
+  },
+  provide() {
+    return {
+      disabled: this.isDisabled,
+    }
   },
   data() {
     return {
@@ -200,10 +210,14 @@ export default {
       if (this.selected === item) this.$nextTick(() => this.select())
     },
     onChange(e) {
+      if (this.isDisabled) return
+
       this.run(e.target.files)
       this.$refs.input.value = null
     },
     onDrop(e) {
+      if (this.isDisabled) return
+
       e.preventDefault()
       this.onLeave()
       if (this.isReadonly || !e.dataTransfer.files.length) return
@@ -212,6 +226,8 @@ export default {
       this.run(e.dataTransfer.files)
     },
     onDragOver(e) {
+      if (this.isDisabled) return
+
       this.isValidDragOver = Array.from(e.dataTransfer.items).every((e) => IsAccepted(e, 'image/*'))
       this.isDragOver = true
       e.preventDefault()
@@ -374,6 +390,10 @@ export default {
         z-index: -1;
 
         pointer-events: none;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
       }
     }
 
