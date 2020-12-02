@@ -31,12 +31,7 @@
         <FontAwesomeIcon icon="trash"></FontAwesomeIcon>
       </div>
     </div>
-    <Draggable
-      v-if="multiple"
-      v-model="thumbnails"
-      :disabled="!sortable || !isDisabled"
-      class="elder-image__thumbnails"
-    >
+    <Draggable v-if="multiple" v-model="thumbnails" :disabled="!sortable || isDisabled" class="elder-image__thumbnails">
       <thumbnail
         v-for="(item, index) in thumbnails"
         :key="index"
