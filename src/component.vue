@@ -195,7 +195,9 @@ export default {
         }),
       ).then((result) => {
         if (!result || !result.length) return
-        this.$emit('input', this.multiple ? [...(this.value || []), ...result] : result[0])
+        result = result.flat()
+        let value = this.value || []
+        this.$emit('input', this.multiple ? [...value, ...result] : result[0])
         this.resetQueue()
         if (!this.selected || !this.multiple) this.$nextTick(() => this.select())
       })
